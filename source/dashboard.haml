@@ -4,14 +4,51 @@
             .span4#horizon
                 artificial horizon
         .row
-            .span4
-                status
+            .span2
+                .row
+                    .span2
+                        Roll
+                    .span2
+                        Pitch
+                    .span2
+                        Heading
+                    .span2
+                        Altitude
+                    .span2
+                        Battery
+            .span2
+                .state
+                    %span.label Motor status
+                    .btn Off
+                .state
+                    %span.label Flight mode
+                    .btn.btn-primary Rate
+                .state
+                    %span.label Altitude hold
+                    .btn Off
+
     .span8
         .row
             .span3.stick.left
                 .position
             .span2
-                buttons
+                .buttons
+                    .button
+                        %span.label Mode
+                        .progress
+                            .bar
+                    .button
+                        %span.label Aux 1
+                        .progress
+                            .bar
+                    .button
+                        %span.label Aux 2
+                        .progress
+                            .bar
+                    .button
+                        %span.label Aux 3
+                        .progress
+                            .bar
             .span3.stick.right
                 .position
         .row.engines
@@ -43,14 +80,12 @@
             success: function(data, status) {
                 $('#log').prepend(data.join(',') + '\n')
                 now = new Date().getTime()
-                gyrox.append(now, data[0])
-                gyroy.append(now, data[1])
-                gyroz.append(now, data[2])
-                axlx.append(now, data[3])
-                axly.append(now, data[4])
-                axlz.append(now, data[5])
             }
         });
+    }
+
+    function setEngine(i, amount){
+
     }
 
 
