@@ -9,16 +9,16 @@ The idea of the project is to have a portable solution which works on any platfo
 Run
 ---
 The current setup is somewhat messy, but it's sure going to improve in the future. The first step is to install middleman:
- gem install middleman
+	gem install middleman
 And install foreman:
- gem install foreman
+	gem install foreman
 Then install pyserial:
- pip install pyserial
+	pip install pyserial
 My arduino usually shows up on the same serial port, but you might want to check yours in 'listener.py', and change it to the correct one.
 And your're all set, now just let middleman take care of the rest:
- $ middleman start
+	$ middleman start
 You can then open up the interface in your favorite browser:
- http://127.0.0.1:4567
+	http://127.0.0.1:4567
 Middleman actually listens on all your ips, so you can access that page from any pc in that network.
 
 How does it work?
