@@ -1,0 +1,85 @@
+.row
+    .span12
+        .page-header
+            %h2 Sensors
+
+    .span3
+        %form.form-inline
+            %fieldset
+                %label.checkbox
+                    %input{'type' => 'checkbox', 'value' => '0', 'checked' => 'checked'} Gyro Roll
+                %label.checkbox
+                    %input{'type' => 'checkbox', 'value' => '1', 'checked' => 'checked'} Gyro Pitch
+                %label.checkbox
+                    %input{'type' => 'checkbox', 'value' => '2', 'checked' => 'checked'} Gyro Yaw
+                %label.checkbox
+                    %input{'type' => 'checkbox', 'value' => '3', 'checked' => 'checked'} Axl X
+                %label.checkbox
+                    %input{'type' => 'checkbox', 'value' => '4', 'checked' => 'checked'} Axl Y
+                %label.checkbox
+                    %input{'type' => 'checkbox', 'value' => '5', 'checked' => 'checked'} Axl Z
+    .span9
+        %canvas{:id => 'chart',:width => '700', :height => '250'}
+        %pre#log
+
+
+:javascript
+    grid = {
+        fillStyle:'#fff',
+        strokeStyle: '#ddd',
+        lineWidth: 1,
+        millisPerLine: 100,
+        verticalSections: 4
+    };
+    labels = {
+        fillStyle:'#000'
+    }
+
+    options = {
+        grid: grid,
+        labels: labels,
+        interpolation: 'line',
+    }
+
+    // setup timeseries for every axis
+    var gyrox = new TimeSeries();
+    var gyroy = new TimeSeries();
+    var gyroz = new TimeSeries();
+    var axlx = new TimeSeries();
+    var axly = new TimeSeries();
+    var axlz = new TimeSeries();
+
+    var chart = new SmoothieChart(options);
+
+    function createTimeline() {
+        chart.addTimeSeries(gyrox, { strokeStyle: 'rgba(255, 0, 0, 1)', fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
+        chart.addTimeSeries(gyroy, { strokeStyle: 'rgba(0, 255, 0, 1)', fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
+        chart.addTimeSeries(gyroz, { strokeStyle: 'rgba(0, 0, 255, 1)', fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
+        chart.addTimeSeries(axlx, { strokeStyle: 'rgba(255, 0, 0, 1)', fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
+        chart.addTimeSeries(axly, { strokeStyle: 'rgba(0, 255, 0, 1)', fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
+        chart.addTimeSeries(axlz, { strokeStyle: 'rgba(0, 0, 255, 1)', fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
+        chart.streamTo(document.getElementById("chart"), 100);
+    }
+    createTimeline();
+
+    function getLog() {
+        $.ajax({
+            url:'http://127.0.0.1:5678/?command=i',
+            complete: function() {
+                setTimeout(getLog,100); //now that the request is complete, do it again in 1 second
+            },
+            success: function(data, status) {
+                $('#log').prepend(data.join(',') + '\n')
+                now = new Date().getTime()
+                gyrox.append(now, data[0])
+                gyroy.append(now, data[1])
+                gyroz.append(now, data[2])
+                axlx.append(now, data[3])
+                axly.append(now, data[4])
+                axlz.append(now, data[5])
+            }
+        });
+
+    }
+
+    getLog();
