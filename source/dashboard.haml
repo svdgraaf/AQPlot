@@ -1,0 +1,57 @@
+.row#dashboard
+    .span4
+        .row
+            .span4#horizon
+                artificial horizon
+        .row
+            .span4
+                status
+    .span8
+        .row
+            .span3.stick.left
+                .position
+            .span2
+                buttons
+            .span3.stick.right
+                .position
+        .row.engines
+            .engine.span1.progress.progress-striped
+                .throttle.bar
+            .engine.span1.progress.progress-striped
+                .throttle.bar
+            .engine.span1.progress.progress-striped
+                .throttle.bar
+            .engine.span1.progress.progress-striped
+                .throttle.bar
+            .engine.span1.progress.progress-striped
+                .throttle.bar
+            .engine.span1.progress.progress-striped
+                .throttle.bar
+            .engine.span1.progress.progress-striped
+                .throttle.bar
+            .engine.span1.progress.progress-striped
+                .throttle.bar
+        
+
+:javascript
+    function getLog() {
+        $.ajax({
+            url:'http://127.0.0.1:5678/?command=s',
+            complete: function() {
+                setTimeout(getLog,100);
+            },
+            success: function(data, status) {
+                $('#log').prepend(data.join(',') + '\n')
+                now = new Date().getTime()
+                gyrox.append(now, data[0])
+                gyroy.append(now, data[1])
+                gyroz.append(now, data[2])
+                axlx.append(now, data[3])
+                axly.append(now, data[4])
+                axlz.append(now, data[5])
+            }
+        });
+    }
+
+
+    getLog();

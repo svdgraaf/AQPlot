@@ -7,8 +7,7 @@
         
     %title AQPlot
 
-    = stylesheet_link_tag 'bootstrap.min'
-    = stylesheet_link_tag 'all'
+    = stylesheet_link_tag 'aqplot'
     %script{:src => '//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js'}
     %script{:src => 'javascripts/all.js'}
     
@@ -23,11 +22,16 @@
           %a.brand{'href' => '#'} AeroQuad Plotter
           .nav-collapse.collapse
             %ul.nav
-              %li.active
-                %a{'href' => '#'} Sensors
               %li
-                %a{'href' => '#'} Transmitter
+                %a{'href' => '/'} Home
               %li
-                %a{'href' => '#'} Engines
+                %a{'href' => '/dashboard.html'} Dashboard
+              %li
+                %a{'href' => '/sensors.html'} Sensors
+              %li
+                %a{'href' => '/receiver.html'} Receiver
+              %li
+                %a{'href' => '/engines.html'} Engines
     #content.container
       = yield
+      %pre#log
