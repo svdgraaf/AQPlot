@@ -38,19 +38,19 @@
                     .button
                         %span.label Mode
                         .progress
-                            .bar
+                            .bar#mode
                     .button
                         %span.label Aux 1
                         .progress
-                            .bar
+                            .bar#aux1
                     .button
                         %span.label Aux 2
                         .progress
-                            .bar
+                            .bar#aux2
                     .button
                         %span.label Aux 3
                         .progress
-                            .bar
+                            .bar#aux3
             .span3.stick.right
                 .position
         .row.engines
@@ -116,9 +116,8 @@
         z = z * 45
         $('#dial').css('transform','rotate(' + z + 'deg)');
         $('#dial').css('-webkit-transform','rotate(' + z + 'deg)');
-
-
     }
+    
     function setAltitude(height){}
     function setAltitudeHold(value){}
     function setReceiver(axis, rate){
@@ -149,6 +148,10 @@
             $('.stick.right .position').css('left', pos);
         }
 
+        if(axis == 'mode' || axis == 'aux1' || axis == 'aux2' || axis == 'aux3') {
+            amount = (rate / 1000) * 150
+            $('#' + axis).css('width',amount);
+        }
 
 
     }
