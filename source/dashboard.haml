@@ -2,8 +2,8 @@
     .span4
         .row
             .span4#horizon
-                %img{'src' => '/images/dial.png'}#dial
-                %img{'src' => '/images/ah.jpg'}#ah
+                %img#dial{'src' => '/images/dial.png'}
+                %img#ah{'src' => '/images/ah.jpg'}
 
         .row
             .span2
@@ -112,7 +112,12 @@
             }
         });
     }
-    function setKinematics(x, y, z){}
+    function setKinematics(x, y, z){
+        z = z * 45
+        $('#dial').css('transform','rotate(' + z + 'deg)');
+        console.log(z)
+        $('#dial').css('-webkit-transform','rotate(' + z + 'deg)');
+    }
     function setAltitude(height){}
     function setAltitudeHold(value){}
     function setReceiver(axis, rate){
