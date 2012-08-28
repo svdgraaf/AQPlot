@@ -10,23 +10,28 @@
                 .row
                     .span2
                         Roll
+                        .btn.btn-mini#roll 0
                     .span2
                         Pitch
+                        .btn.btn-mini#pitch 0 
                     .span2
                         Heading
+                        .btn.btn-mini#heading 0
                     .span2
                         Altitude
+                        .btn.btn-mini#altitude 0
                     .span2
                         Battery
+                        .btn.btn-mini#battery 0
             .span2
                 .state
                     %span.label Motor status
                     .btn#armed Off
                 .state
                     %span.label Flight mode
-                    .btn.btn-primary Rate
+                    .btn.btn-primary#mode-status Rate
                 .state
-                    %span.label Altitude hold
+                    %span.label#altitude-hold Altitude hold
                     .btn Off
 
     .span8
@@ -113,13 +118,25 @@
         });
     }
     function setKinematics(x, y, z){
+        $('#roll').text(x);
+        $('#pitch').text(y);
+        $('#heading').text(z);
         z = z * 45
         $('#dial').css('transform','rotate(' + z + 'deg)');
         $('#dial').css('-webkit-transform','rotate(' + z + 'deg)');
     }
-    
-    function setAltitude(height){}
-    function setAltitudeHold(value){}
+
+    function setAltitude(height){
+        $('#height').text(height);
+    }
+    function setAltitudeHold(value){
+        if(parseInt(value) == 1) {
+            $('altitude-hold').text('On').addClass('btn-success')
+        }
+        else {
+            $('altitude-hold').text('Off').removeClass('btn-success')
+        }
+    }
     function setReceiver(axis, rate){
         if(rate == 0)
         {
@@ -155,18 +172,28 @@
 
 
     }
-    function setVoltage(voltage){}
-    function setMode(mode){}
+    function setVoltage(voltage){
+        $('#voltage').text(voltage)
+    }
+    function setMode(mode){
+        if(parseInt(mode) == 0) {
+            $('#mode-status').text('Rate').removeClass('btn-success');
+        }
+        else
+        {
+            $('#mode-status').text('Attitude').addClass('btn-success');
+        }
+    }
     function setArmed(status)
     {
         if(parseInt(status) == 1)
         {
-            $('#armed').addClass('btn-warning')
+            $('#armed').addClass('btn-danger')
             $('#armed').text('Armed')
         }
         else
         {
-            $('#armed').removeClass('btn-warning')
+            $('#armed').removeClass('btn-danger')
             $('#armed').text('Off')
         }
     }
