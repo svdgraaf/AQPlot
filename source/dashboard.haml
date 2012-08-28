@@ -117,13 +117,30 @@
     function setAltitudeHold(value){}
     function setReceiver(axis, rate){
         rate = rate - 1000
-        width = 180
-        if(axis == 'throttle')
-        {
+        width = 200
+        if(axis == 'throttle' || axis == 'pitch') {
             pos = width - (width * (rate / 1000))
-            console.log(pos)
+        }
+        if(axis == 'yaw' || axis == 'roll')
+        {
+            pos = (width * (rate / 1000)) - 20        
+        }
+
+        if(axis == 'throttle'){
             $('.stick.left .position').css('top', pos);
         }
+        if(axis == 'pitch'){
+            $('.stick.right .position').css('top', pos);
+        }
+        if(axis == 'yaw') {
+            $('.stick.left .position').css('left', pos);
+        }
+        if(axis == 'roll'){
+            $('.stick.right .position').css('left', pos);
+        }
+
+
+
     }
     function setVoltage(voltage){}
     function setMode(mode){}
