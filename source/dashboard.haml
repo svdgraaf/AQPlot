@@ -2,7 +2,9 @@
     .span4
         .row
             .span4#horizon
-                artificial horizon
+                %img{'src' => '/images/dial.png'}#dial
+                %img{'src' => '/images/ah.jpg'}#ah
+
         .row
             .span2
                 .row
@@ -19,7 +21,7 @@
             .span2
                 .state
                     %span.label Motor status
-                    .btn Off
+                    .btn#armed Off
                 .state
                     %span.label Flight mode
                     .btn.btn-primary Rate
@@ -52,22 +54,22 @@
             .span3.stick.right
                 .position
         .row.engines
-            .engine.span1.progress.progress-striped
-                .throttle.bar
-            .engine.span1.progress.progress-striped
-                .throttle.bar
-            .engine.span1.progress.progress-striped
-                .throttle.bar
-            .engine.span1.progress.progress-striped
-                .throttle.bar
-            .engine.span1.progress.progress-striped
-                .throttle.bar
-            .engine.span1.progress.progress-striped
-                .throttle.bar
-            .engine.span1.progress.progress-striped
-                .throttle.bar
-            .engine.span1.progress.progress-striped
-                .throttle.bar
+            .engine.span1.progress
+                .throttle.bar#engine1
+            .engine.span1.progress
+                .throttle.bar#engine2
+            .engine.span1.progress
+                .throttle.bar#engine3
+            .engine.span1.progress
+                .throttle.bar#engine4
+            .engine.span1.progress
+                .throttle.bar#engine5
+            .engine.span1.progress
+                .throttle.bar#engine6
+            .engine.span1.progress
+                .throttle.bar#engine7
+            .engine.span1.progress
+                .throttle.bar#engine8
         
 
 :javascript
@@ -80,12 +82,69 @@
             success: function(data, status) {
                 $('#log').prepend(data.join(',') + '\n')
                 now = new Date().getTime()
+                
+                setArmed(data[0]);
+                setKinematics(data[1], data[2], data[3]);
+                setAltitude(data[4])
+                setAltitudeHold(data[5])
+
+                setReceiver('roll', data[6])
+                setReceiver('pitch', data[7])
+                setReceiver('yaw', data[8])
+                setReceiver('throttle', data[9])
+                setReceiver('mode', data[10])
+                setReceiver('aux1', data[11])
+                setReceiver('aux2', data[12])
+                setReceiver('aux3', data[13])
+
+                setEngine(1, data[14])
+                setEngine(2, data[15])
+                setEngine(3, data[16])
+                setEngine(4, data[17])
+                setEngine(5, data[18])
+                setEngine(6, data[19])
+                setEngine(7, data[20])
+                setEngine(8, data[21])
+
+                setVoltage(data[22])
+                setMode(data[23])
+
             }
         });
     }
+    function setKinematics(x, y, z){}
+    function setAltitude(height){}
+    function setAltitudeHold(value){}
+    function setReceiver(axis, rate){
+        rate = rate - 1000
+        width = 180
+        if(axis == 'throttle')
+        {
+            pos = width - (width * (rate / 1000))
+            console.log(pos)
+            $('.stick.left .position').css('top', pos);
+        }
+    }
+    function setVoltage(voltage){}
+    function setMode(mode){}
+    function setArmed(status)
+    {
+        if(parseInt(status) == 1)
+        {
+            $('#armed').addClass('btn-warning')
+            $('#armed').text('Armed')
+        }
+        else
+        {
+            $('#armed').removeClass('btn-warning')
+            $('#armed').text('Off')
+        }
+    }
 
-    function setEngine(i, amount){
-
+    function setEngine(i, rate){
+        margin = ((rate - 1000) / 1000) * 200
+        margin = 200 - margin
+        $('#engine' + i).css('marginTop', margin);
     }
 
 
