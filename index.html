@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html manifest='offline.appcache'>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <meta content='initial-scale = 1.0,maximum-scale = 1.0' name='viewport' />
+    <meta content='nl_NL' name='language' />
+    <title>
+      AQPlot
+      index
+    </title>
+    <link rel="stylesheet" type="text/css" href="stylesheets/aqplot.css" media="screen" />
+    <script src='javascripts/all.js'></script>
+    <script>
+      var host = $.jStorage.get('proxy-location', "http://127.0.0.1:5678/")
+    </script>
+  </head>
+  <body>
+    <div class='navbar navbar-fixed-top'>
+      <div class='navbar-inner'>
+        <div class='container'>
+          <a class='btn btn-navbar' data-target='.nav-collapse' data-toggle='collapse'>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+          </a>
+          <a class='brand' href='/'>AeroQuad Plotter</a>
+          <div class='nav-collapse collapse'>
+            <ul class='nav'>
+              <li class='active'>
+                <a href='/'>Home</a>
+              </li>
+              <li>
+                <a href='/dashboard.html'>Dashboard</a>
+              </li>
+              <li>
+                <a href='/sensors.html'>Sensors</a>
+              </li>
+              <li>
+                <a href='/receiver.html'>Receiver</a>
+              </li>
+              <li>
+                <a href='/engines.html'>Engines</a>
+              </li>
+            </ul>
+            <ul class='nav pull-right'>
+              <li>
+                <a data-target='#settings' data-toggle='modal' href='#'>
+                  <i class='icon icon-cog'></i>
+                  Settings
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='container' id='content'>
+      <div class='row'>
+        <div class='span12'>
+          <div class='page-header'>
+            <h1>AeroQuad Plotter</h1>
+          </div>
+        </div>
+        <div class='span12'>
+          <p>Awesome, AeroQuads rock! :D</p>
+        </div>
+      </div>
+      <pre id='log'></pre>
+      <form class='modal fade form-horizontal' id='settings' onsubmit='storeSettings();return false;'>
+        <div class='modal-header'>
+          <button aria-hidden='true' class='close' data-dismiss='modal' type='button'>&times;</button>
+          <h3>Settings</h3>
+        </div>
+        <div class='modal-body'>
+          <fieldset>
+            <div class='control-group'>
+              <label class='control-label'>
+                Location of proxy
+              </label>
+              <div class='controls'>
+                <input id='proxy-location' type='text' value='' />
+              </div>
+            </div>
+          </fieldset>
+        </div>
+        <div class='modal-footer'>
+          <input class='btn btn-primary' type='submit' value='Save' />
+        </div>
+      </form>
+      <script type='text/javascript'>
+        //<![CDATA[
+          function storeSettings(){  
+              $.jStorage.set('proxy-location', $('#proxy-location').val());
+              
+              $('#settings').modal('hide')
+          }
+          
+          $(function() {
+              $('#proxy-location').val($.jStorage.get('proxy-location', "http://127.0.0.1:5678/"));
+          });
+        //]]>
+      </script>
+    </div>
+  </body>
+</html>
