@@ -7,10 +7,13 @@ The AQ Configurator needs a stable connection to be able to send back to telemet
 The idea of the project is to have a portable solution which works on any platform.
 
 Screenshots
-----------
+-----------
 [![Dashboard](https://img.skitch.com/20120828-nwhewwk1j3xbwafu56enesfkc6.preview.jpg)](https://img.skitch.com/20120828-nwhewwk1j3xbwafu56enesfkc6.jpg)
 [![Screenshot](https://img.skitch.com/20120825-mciasf39b3crj135cjrpk18m4r.preview.jpg)](https://img.skitch.com/20120825-mciasf39b3crj135cjrpk18m4r.jpg)
 
+Video
+-----
+You can find a video of AQPlot here: http://www.youtube.com/watch?v=Yf2XiCNjrG4
 
 
 Run
