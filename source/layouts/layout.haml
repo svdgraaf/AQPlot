@@ -5,7 +5,9 @@
     %meta{:name => 'viewport', :content => 'initial-scale = 1.0,maximum-scale = 1.0'}
     %meta{:name => 'language', :content => 'nl_NL'}
         
-    %title AQPlot
+    %title
+      AQPlot
+      = @active
 
     = stylesheet_link_tag 'aqplot'
     %script{:src => 'javascripts/all.js'}
@@ -22,17 +24,38 @@
           %a.brand{'href' => '/'} AeroQuad Plotter
           .nav-collapse.collapse
             %ul.nav
+              - if @active == 'index'
+                %li.active
+                  %a{'href' => '/'} Home
+              - else
+                %li
+                  %a{'href' => '/'} Home
+              - if @active == 'dashboard'
+                %li.active
+                  %a{'href' => '/dashboard.html'} Dashboard
+              - else
+                %li
+                  %a{'href' => '/dashboard.html'} Dashboard
+              - if @active == 'sensors'
+                %li.active
+                  %a{'href' => '/sensors.html'} Sensors
+              - else
+                %li
+                  %a{'href' => '/sensors.html'} Sensors
+              - if @active == 'receiver'
+                %li.active
+                  %a{'href' => '/receiver.html'} Receiver
+              - else
+                %li
+                  %a{'href' => '/receiver.html'} Receiver
+              - if @active == 'engines'
+                %li.active
+                  %a{'href' => '/engines.html'} Engines
+              - else
+                %li
+                  %a{'href' => '/engines.html'} Engines
+            %ul.nav.pull-right
               %li
-                %a{'href' => '/'} Home
-              %li
-                %a{'href' => '/dashboard.html'} Dashboard
-              %li
-                %a{'href' => '/sensors.html'} Sensors
-              %li
-                %a{'href' => '/receiver.html'} Receiver
-              %li
-                %a{'href' => '/engines.html'} Engines
-              %li.pull-right
                 %a{'href' => '#', 'data-toggle' => "modal", 'data-target' => "#settings"}
                   %i.icon.icon-cog
                   Settings

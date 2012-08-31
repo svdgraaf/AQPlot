@@ -20,10 +20,26 @@ map("/offline.appcache") { run offline }
 # We need to add this page declaration to force middleman to include the manifest in a build
 page "/offline.appcache", :proxy => "offline.appcache"
 
+page "/" do 
+  @active = "index"
+end
+page "/dashboard.html" do 
+  @active = "dashboard"
+end
+page "/sensors.html" do 
+  @active = "sensors"
+end
+page "/receiver.html" do 
+  @active = "receiver"
+end
+page "/engines.html" do 
+  @active = "engines"
+end
+
 # Build-specific configuration
 configure :build do
   # For example, change the Compass output style for deployment
-  # activate :minify_css
+  activate :minify_css
   
   # Minify Javascript on build
   # activate :minify_javascript
