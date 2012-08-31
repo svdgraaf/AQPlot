@@ -80,7 +80,7 @@
 :javascript
     function getLog() {
         $.ajax({
-            url:'http://' + window.location.hostname + ':5678/?command=s',
+            url:host + '?command=s',
             complete: function() {
                 setTimeout(getLog,100);
             },

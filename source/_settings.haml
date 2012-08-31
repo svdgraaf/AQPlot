@@ -1,0 +1,24 @@
+%form.modal.fade.form-horizontal#settings{'onsubmit' => 'storeSettings();return false;'}
+    .modal-header
+        %button.close{'type' => 'button', 'data-dismiss' => "modal", 'aria-hidden' => "true"} &times;
+        %h3 Settings
+    .modal-body
+        %fieldset
+            .control-group
+                %label.control-label
+                    Location of proxy
+                .controls
+                    %input#proxy-location{'type' => 'text', 'value' => ''}
+    .modal-footer
+        %input.btn.btn-primary{'type' => 'submit', 'value' => 'Save'}
+
+:javascript
+    function storeSettings(){  
+        $.jStorage.set('proxy-location', $('#proxy-location').val());
+        
+        $('#settings').modal('hide')
+    }
+
+    $(function() {
+        $('#proxy-location').val($.jStorage.get('proxy-location', "http://127.0.0.1:5678/"));
+    });

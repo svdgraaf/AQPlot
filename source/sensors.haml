@@ -63,7 +63,7 @@
 
     function getLog() {
         $.ajax({
-            url:'http://' + window.location.hostname + ':5678/?command=i',
+            url:host+'/?command=i',
             complete: function() {
                 setTimeout(getLog,100); //now that the request is complete, do it again in 1 second
             },

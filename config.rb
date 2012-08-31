@@ -13,7 +13,7 @@ offline = Rack::Offline.configure do
   cache "images/glyphicons-halflings-white.png"
   cache "images/glyphicons-halflings.png"
   cache "images/horizon.png"
-  cache "images/all.js"
+  cache "javascripts/all.js"
 end
 
 map("/offline.appcache") { run offline }

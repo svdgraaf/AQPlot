@@ -9,7 +9,8 @@
 
     = stylesheet_link_tag 'aqplot'
     %script{:src => 'javascripts/all.js'}
-    
+    %script
+      var host = $.jStorage.get('proxy-location', "http://127.0.0.1:5678/")
   %body
     .navbar.navbar-fixed-top
       .navbar-inner
@@ -32,7 +33,10 @@
               %li
                 %a{'href' => '/engines.html'} Engines
               %li.pull-right
-                %a{'href' => '/settings.html'} Settings
+                %a{'href' => '#', 'data-toggle' => "modal", 'data-target' => "#settings"}
+                  %i.icon.icon-cog
+                  Settings
     #content.container
       = yield
       %pre#log
+      = partial '_settings'
