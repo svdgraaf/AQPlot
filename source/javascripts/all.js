@@ -2,3 +2,4 @@
 //= require 'bootstrap.js'
 //= require 'smoothie.js'
 //= require 'jstorage.js'
+//= require 'aqplot.js'
