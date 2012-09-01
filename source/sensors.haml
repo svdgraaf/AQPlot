@@ -7,22 +7,70 @@
         %form.form-inline
             %fieldset
                 %label.checkbox
-                    %input#gyro-roll{'type' => 'checkbox', 'value' => '0', 'checked' => 'checked'} Gyro Roll
+                    %span.swatch
+                    %pre#gyro-roll-value
+                    %input#gyro-roll{'onclick' => 'return toggleAxis($(this));', 'type' => 'checkbox', 'value' => '0', 'checked' => 'checked'}
+                    %span Gyro Roll
                 %label.checkbox
-                    %input#gyro-pitch{'type' => 'checkbox', 'value' => '1', 'checked' => 'checked'} Gyro Pitch
+                    %span.swatch
+                    %input#gyro-pitch{'onclick' => 'return toggleAxis($(this));', 'type' => 'checkbox', 'value' => '1', 'checked' => 'checked'}
+                    %pre#gyro-pitch-value
+                    Gyro Pitch
                 %label.checkbox
-                    %input#gyro-yaw{'type' => 'checkbox', 'value' => '2', 'checked' => 'checked'} Gyro Yaw
+                    %span.swatch
+                    %input#gyro-yaw{'onclick' => 'return toggleAxis($(this));', 'type' => 'checkbox', 'value' => '2', 'checked' => 'checked'}
+                    %pre#gyro-yaw-value
+                    Gyro Yaw
                 %label.checkbox
-                    %input#axl-x{'type' => 'checkbox', 'value' => '3', 'checked' => 'checked'} Axl X
+                    %span.swatch
+                    %input#axl-x{'onclick' => 'return toggleAxis($(this));', 'type' => 'checkbox', 'value' => '3', 'checked' => 'checked'}
+                    %pre#axl-x-value
+                    Axl X
                 %label.checkbox
-                    %input#axl-y{'type' => 'checkbox', 'value' => '4', 'checked' => 'checked'} Axl Y
+                    %span.swatch
+                    %input#axl-y{'onclick' => 'return toggleAxis($(this));', 'type' => 'checkbox', 'value' => '4', 'checked' => 'checked'}
+                    %pre#axl-y-value
+                    Axl Y
                 %label.checkbox
-                    %input#axl-z{'type' => 'checkbox', 'value' => '5', 'checked' => 'checked'} Axl Z
+                    %span.swatch
+                    %input#axl-z{'onclick' => 'return toggleAxis($(this));', 'type' => 'checkbox', 'value' => '5', 'checked' => 'checked'}
+                    %pre#axl-z-value
+                    Axl Z
+                %label.checkbox
+                    %span.swatch
+                    %input#mag-x{'onclick' => 'return toggleAxis($(this));', 'type' => 'checkbox', 'value' => '6', 'checked' => 'checked'}
+                    %pre#mag-x-value
+                    Mag x
+                %label.checkbox
+                    %span.swatch
+                    %input#mag-y{'onclick' => 'return toggleAxis($(this));', 'type' => 'checkbox', 'value' => '7', 'checked' => 'checked'}
+                    %pre#mag-y-value
+                    Mag Y
+                %label.checkbox
+                    %span.swatch
+                    %input#mag-z{'onclick' => 'return toggleAxis($(this));', 'type' => 'checkbox', 'value' => '8', 'checked' => 'checked'}
+                    %pre#mag-z-value
+                    Mag Z
     .span9
         %canvas{:id => 'chart',:width => '700', :height => '250'}
 
 
 :javascript
+    function toggleAxis(checkbox) {
+        $('#sensors input').each(function(i, o){
+            if($(o).attr('id') == checkbox.attr('id')){
+                console.log(checkbox.attr('checked'));
+                if(checkbox.attr('checked') == 'checked'){
+                    $($(o.parentNode).children()[0])
+                    chart.addTimeSeries(axis[i], { strokeStyle: $($(o.parentNode).children()[0]).css('backgroundColor'), fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
+                }
+                else
+                {
+                    chart.removeTimeSeries(axis[i]);
+                }
+            }
+        });
+    }
     grid = {
         fillStyle:'#fff',
         strokeStyle: '#ddd',
@@ -45,7 +93,7 @@
     axis = []
     $('#sensors input').each(function(i,o){
         axis[i] = new TimeSeries();
-        chart.addTimeSeries(axis[i], { strokeStyle: $(o.parentNode).css('backgroundColor'), fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
+        chart.addTimeSeries(axis[i], { strokeStyle: $($(o.parentNode).children()[0]).css('backgroundColor'), fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
     });
     chart.streamTo(document.getElementById("chart"), 100);
 
@@ -60,6 +108,7 @@
                 now = new Date().getTime()
                 $('#sensors input').each(function(i,o){
                     axis[i].append(now, data[$(o).val()]);
+                    $('#' + $(o).attr('id') + '-value').text(data[$(o).val()])
                 });
             }
         });
