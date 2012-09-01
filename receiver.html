@@ -36,7 +36,7 @@
                 <a href='sensors.html'>Sensors</a>
               </li>
               <li class='active'>
-                <a href='receiver.html'>Receiver</a>
+                <a href='receiver.html'>Transmitter</a>
               </li>
               <li>
                 <a href='engines.html'>Engines</a>
@@ -55,13 +55,134 @@
       </div>
     </div>
     <div class='container' id='content'>
-      <div class='row'>
-        <div class='span12'>
-          <div class='page-header'>
-            <h2>Receiver</h2>
-          </div>
-        </div>
-      </div>
+      <div class='row' id='transmitter'>
+  <div class='span12'>
+    <div class='page-header'>
+      <h2>Transmitter</h2>
+    </div>
+  </div>
+  <div class='span3'>
+    <form class='form-inline'>
+      <fieldset>
+        <label class='checkbox'>
+          <span class='swatch'></span>
+          <pre id='roll-value'></pre>
+          <input checked='checked' id='roll' onclick='return toggleAxis($(this));' type='checkbox' value='6' />
+          <span>Roll</span>
+        </label>
+        <label class='checkbox'>
+          <span class='swatch'></span>
+          <input checked='checked' id='pitch' onclick='return toggleAxis($(this));' type='checkbox' value='7' />
+          <pre id='pitch-value'></pre>
+          Pitch
+        </label>
+        <label class='checkbox'>
+          <span class='swatch'></span>
+          <input checked='checked' id='yaw' onclick='return toggleAxis($(this));' type='checkbox' value='8' />
+          <pre id='yaw-value'></pre>
+          Yaw
+        </label>
+        <label class='checkbox'>
+          <span class='swatch'></span>
+          <input checked='checked' id='throttle' onclick='return toggleAxis($(this));' type='checkbox' value='9' />
+          <pre id='throttle-value'></pre>
+          Throttle
+        </label>
+        <label class='checkbox'>
+          <span class='swatch'></span>
+          <input checked='checked' id='mode' onclick='return toggleAxis($(this));' type='checkbox' value='10' />
+          <pre id='mode-value'></pre>
+          Mode
+        </label>
+        <label class='checkbox'>
+          <span class='swatch'></span>
+          <input checked='checked' id='altitude' onclick='return toggleAxis($(this));' type='checkbox' value='11' />
+          <pre id='altitude-value'></pre>
+          Altitude
+        </label>
+        <label class='checkbox'>
+          <span class='swatch'></span>
+          <input checked='checked' id='aux2' onclick='return toggleAxis($(this));' type='checkbox' value='12' />
+          <pre id='aux2-value'></pre>
+          Aux 2
+        </label>
+        <label class='checkbox'>
+          <span class='swatch'></span>
+          <input checked='checked' id='aux3' onclick='return toggleAxis($(this));' type='checkbox' value='13' />
+          <pre id='aux3-value'></pre>
+          Aux3
+        </label>
+      </fieldset>
+    </form>
+  </div>
+  <div class='span9'>
+    <canvas height='250' id='chart' width='700'></canvas>
+  </div>
+</div>
+<script type='text/javascript'>
+  //<![CDATA[
+    function toggleAxis(checkbox) {
+        $('#transmitter input').each(function(i, o){
+            if($(o).attr('id') == checkbox.attr('id')){
+                console.log(checkbox.attr('checked'));
+                if(checkbox.attr('checked') == 'checked'){
+                    $($(o.parentNode).children()[0])
+                    chart.addTimeSeries(axis[i], { strokeStyle: $($(o.parentNode).children()[0]).css('backgroundColor'), fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
+                }
+                else
+                {
+                    chart.removeTimeSeries(axis[i]);
+                }
+            }
+        });
+    }
+    grid = {
+        fillStyle:'#fff',
+        strokeStyle: '#ddd',
+        lineWidth: 1,
+        millisPerLine: 100,
+        verticalSections: 4
+    };
+    labels = {
+        fillStyle:'#000'
+    }
+    
+    options = {
+        grid: grid,
+        labels: labels,
+        interpolation: 'line',
+    }
+    var chart = new SmoothieChart(options);
+    
+    // setup timeseries for every axis
+    axis = []
+    $('#transmitter input').each(function(i,o){
+        axis[i] = new TimeSeries();
+        chart.addTimeSeries(axis[i], { strokeStyle: $($(o.parentNode).children()[0]).css('backgroundColor'), fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
+    });
+    chart.streamTo(document.getElementById("chart"), 100);
+    
+    function getLog() {
+        $.ajax({
+            url:host+'/?command=s',
+            complete: function() {
+                setTimeout(getLog,100); //now that the request is complete, do it again in 1 second
+            },
+            success: function(data, status) {
+                $('#log').prepend(data.join(',') + '\n')
+                now = new Date().getTime()
+                $('#transmitter input').each(function(i,o){
+                    axis[i].append(now, data[$(o).val()]);
+                    $('#' + $(o).attr('id') + '-value').text(data[$(o).val()])
+                });
+            }
+        });
+    
+    }
+    
+    getLog();
+  //]]>
+</script>
       <pre id='log'></pre>
       <form class='modal fade form-horizontal' id='settings' onsubmit='storeSettings();return false;'>
         <div class='modal-header'>
