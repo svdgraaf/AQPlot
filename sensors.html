@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html manifest='offline.appcache'>
+<html manifest='foooffline.appcache'>
   <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
     <meta content='initial-scale = 1.0,maximum-scale = 1.0' name='viewport' />
@@ -27,7 +27,7 @@
           <div class='nav-collapse collapse'>
             <ul class='nav'>
               <li>
-                <a href=''>Home</a>
+                <a href='./'>Home</a>
               </li>
               <li>
                 <a href='dashboard.html'>Dashboard</a>
@@ -65,22 +65,58 @@
     <form class='form-inline'>
       <fieldset>
         <label class='checkbox'>
-          <input checked='checked' type='checkbox' value='0'>Gyro Roll</input>
+          <span class='swatch'></span>
+          <pre id='gyro-roll-value'></pre>
+          <input checked='checked' id='gyro-roll' onclick='return toggleAxis($(this));' type='checkbox' value='0' />
+          <span>Gyro Roll</span>
         </label>
         <label class='checkbox'>
-          <input checked='checked' type='checkbox' value='1'>Gyro Pitch</input>
+          <span class='swatch'></span>
+          <input checked='checked' id='gyro-pitch' onclick='return toggleAxis($(this));' type='checkbox' value='1' />
+          <pre id='gyro-pitch-value'></pre>
+          Gyro Pitch
         </label>
         <label class='checkbox'>
-          <input checked='checked' type='checkbox' value='2'>Gyro Yaw</input>
+          <span class='swatch'></span>
+          <input checked='checked' id='gyro-yaw' onclick='return toggleAxis($(this));' type='checkbox' value='2' />
+          <pre id='gyro-yaw-value'></pre>
+          Gyro Yaw
         </label>
         <label class='checkbox'>
-          <input checked='checked' type='checkbox' value='3'>Axl X</input>
+          <span class='swatch'></span>
+          <input checked='checked' id='axl-x' onclick='return toggleAxis($(this));' type='checkbox' value='3' />
+          <pre id='axl-x-value'></pre>
+          Axl X
         </label>
         <label class='checkbox'>
-          <input checked='checked' type='checkbox' value='4'>Axl Y</input>
+          <span class='swatch'></span>
+          <input checked='checked' id='axl-y' onclick='return toggleAxis($(this));' type='checkbox' value='4' />
+          <pre id='axl-y-value'></pre>
+          Axl Y
         </label>
         <label class='checkbox'>
-          <input checked='checked' type='checkbox' value='5'>Axl Z</input>
+          <span class='swatch'></span>
+          <input checked='checked' id='axl-z' onclick='return toggleAxis($(this));' type='checkbox' value='5' />
+          <pre id='axl-z-value'></pre>
+          Axl Z
+        </label>
+        <label class='checkbox'>
+          <span class='swatch'></span>
+          <input checked='checked' id='mag-x' onclick='return toggleAxis($(this));' type='checkbox' value='6' />
+          <pre id='mag-x-value'></pre>
+          Mag x
+        </label>
+        <label class='checkbox'>
+          <span class='swatch'></span>
+          <input checked='checked' id='mag-y' onclick='return toggleAxis($(this));' type='checkbox' value='7' />
+          <pre id='mag-y-value'></pre>
+          Mag Y
+        </label>
+        <label class='checkbox'>
+          <span class='swatch'></span>
+          <input checked='checked' id='mag-z' onclick='return toggleAxis($(this));' type='checkbox' value='8' />
+          <pre id='mag-z-value'></pre>
+          Mag Z
         </label>
       </fieldset>
     </form>
@@ -91,6 +127,21 @@
 </div>
 <script type='text/javascript'>
   //<![CDATA[
+    function toggleAxis(checkbox) {
+        $('#sensors input').each(function(i, o){
+            if($(o).attr('id') == checkbox.attr('id')){
+                console.log(checkbox.attr('checked'));
+                if(checkbox.attr('checked') == 'checked'){
+                    $($(o.parentNode).children()[0])
+                    chart.addTimeSeries(axis[i], { strokeStyle: $($(o.parentNode).children()[0]).css('backgroundColor'), fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
+                }
+                else
+                {
+                    chart.removeTimeSeries(axis[i]);
+                }
+            }
+        });
+    }
     grid = {
         fillStyle:'#fff',
         strokeStyle: '#ddd',
@@ -107,27 +158,15 @@
         labels: labels,
         interpolation: 'line',
     }
-    
-    // setup timeseries for every axis
-    var gyrox = new TimeSeries();
-    var gyroy = new TimeSeries();
-    var gyroz = new TimeSeries();
-    var axlx = new TimeSeries();
-    var axly = new TimeSeries();
-    var axlz = new TimeSeries();
-    
     var chart = new SmoothieChart(options);
     
-    function createTimeline() {
-        chart.addTimeSeries(gyrox, { strokeStyle: 'rgba(255, 0, 0, 1)', fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
-        chart.addTimeSeries(gyroy, { strokeStyle: 'rgba(0, 255, 0, 1)', fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
-        chart.addTimeSeries(gyroz, { strokeStyle: 'rgba(0, 0, 255, 1)', fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
-        chart.addTimeSeries(axlx, { strokeStyle: 'rgba(255, 0, 0, 1)', fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
-        chart.addTimeSeries(axly, { strokeStyle: 'rgba(0, 255, 0, 1)', fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
-        chart.addTimeSeries(axlz, { strokeStyle: 'rgba(0, 0, 255, 1)', fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
-        chart.streamTo(document.getElementById("chart"), 100);
-    }
-    createTimeline();
+    // setup timeseries for every axis
+    axis = []
+    $('#sensors input').each(function(i,o){
+        axis[i] = new TimeSeries();
+        chart.addTimeSeries(axis[i], { strokeStyle: $($(o.parentNode).children()[0]).css('backgroundColor'), fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
+    });
+    chart.streamTo(document.getElementById("chart"), 100);
     
     function getLog() {
         $.ajax({
@@ -138,12 +177,10 @@
             success: function(data, status) {
                 $('#log').prepend(data.join(',') + '\n')
                 now = new Date().getTime()
-                gyrox.append(now, data[0])
-                gyroy.append(now, data[1])
-                gyroz.append(now, data[2])
-                axlx.append(now, data[3])
-                axly.append(now, data[4])
-                axlz.append(now, data[5])
+                $('#sensors input').each(function(i,o){
+                    axis[i].append(now, data[$(o).val()]);
+                    $('#' + $(o).attr('id') + '-value').text(data[$(o).val()])
+                });
             }
         });
     

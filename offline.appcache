@@ -1,9 +1,14 @@
 CACHE MANIFEST
-# 8f9214be402dcad2d9a1c605e6fae208b35ec94e12a1e8ac25df10200675f322
+# 97e2833cbd186e55cea96ae94e271758271e7c3c1c58f2349ecebaf5206b051f
 stylesheets/aqplot.css
 images/ah.jpg
 images/dial.png
 images/glyphicons-halflings-white.png
 images/glyphicons-halflings.png
 images/horizon.png
+images/stick.png
 javascripts/all.js
+dashboard.html
+sensors.html
+receiver.html
+engines.html
