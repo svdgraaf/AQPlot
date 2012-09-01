@@ -72,7 +72,7 @@ def main():
         print 'Use http://%s:%s or http://%s:%s' % ('127.0.0.1', PORT, socket.gethostbyname(socket.gethostname()), PORT)
 
         # open tab
-        webbrowser.open_new_tab('http://127.0.0.1:4567/#set-proxy=http://%s:%s' % (socket.gethostbyname(socket.gethostname()), PORT))
+        webbrowser.open_new_tab('http://svdgraaf.github.com/AQPlot/#set-proxy=http://%s:%s' % (socket.gethostbyname(socket.gethostname()), PORT))
         server.serve_forever()
     except KeyboardInterrupt:
         print 'Shutting down server'
