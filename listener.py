@@ -28,7 +28,6 @@ class ArduinoLogger(threading.Thread):
         while 1:
             line = s.readline()
             line = line.strip()
-            print line
             log.append(line)
             if self.command != lastcommand:
                 print 'received new command, sending: %s' % self.command

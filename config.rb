@@ -19,7 +19,6 @@ offline = Rack::Offline.configure do
   cache "sensors.html"
   cache "receiver.html"
   cache "engines.html"
-  network "/arduino"
 end
 
 map("/offline.appcache") { run offline }
