@@ -13,7 +13,13 @@ offline = Rack::Offline.configure do
   cache "images/glyphicons-halflings-white.png"
   cache "images/glyphicons-halflings.png"
   cache "images/horizon.png"
+  cache "images/stick.png"
   cache "javascripts/all.js"
+  cache "dashboard.html"
+  cache "sensors.html"
+  cache "receiver.html"
+  cache "engines.html"
+  network "/arduino"
 end
 
 map("/offline.appcache") { run offline }
