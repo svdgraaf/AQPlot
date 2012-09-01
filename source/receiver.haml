@@ -1,4 +1,113 @@
-.row
+#transmitter.row
     .span12
         .page-header
-            %h2 Receiver
+            %h2 Transmitter 
+
+    .span3
+        %form.form-inline
+            %fieldset
+                %label.checkbox
+                    %span.swatch
+                    %pre#roll-value
+                    %input#roll{'onclick' => 'return toggleAxis($(this));', 'type' => 'checkbox', 'value' => '6', 'checked' => 'checked'}
+                    %span Roll
+                %label.checkbox
+                    %span.swatch
+                    %input#pitch{'onclick' => 'return toggleAxis($(this));', 'type' => 'checkbox', 'value' => '7', 'checked' => 'checked'}
+                    %pre#pitch-value
+                    Pitch
+                %label.checkbox
+                    %span.swatch
+                    %input#yaw{'onclick' => 'return toggleAxis($(this));', 'type' => 'checkbox', 'value' => '8', 'checked' => 'checked'}
+                    %pre#yaw-value
+                    Yaw
+                %label.checkbox
+                    %span.swatch
+                    %input#throttle{'onclick' => 'return toggleAxis($(this));', 'type' => 'checkbox', 'value' => '9', 'checked' => 'checked'}
+                    %pre#throttle-value
+                    Throttle
+                %label.checkbox
+                    %span.swatch
+                    %input#mode{'onclick' => 'return toggleAxis($(this));', 'type' => 'checkbox', 'value' => '10', 'checked' => 'checked'}
+                    %pre#mode-value
+                    Mode
+                %label.checkbox
+                    %span.swatch
+                    %input#altitude{'onclick' => 'return toggleAxis($(this));', 'type' => 'checkbox', 'value' => '11', 'checked' => 'checked'}
+                    %pre#altitude-value
+                    Altitude
+                %label.checkbox
+                    %span.swatch
+                    %input#aux2{'onclick' => 'return toggleAxis($(this));', 'type' => 'checkbox', 'value' => '12', 'checked' => 'checked'}
+                    %pre#aux2-value
+                    Aux 2
+                %label.checkbox
+                    %span.swatch
+                    %input#aux3{'onclick' => 'return toggleAxis($(this));', 'type' => 'checkbox', 'value' => '13', 'checked' => 'checked'}
+                    %pre#aux3-value
+                    Aux3
+    .span9
+        %canvas{:id => 'chart',:width => '700', :height => '250'}
+
+
+:javascript
+    function toggleAxis(checkbox) {
+        $('#transmitter input').each(function(i, o){
+            if($(o).attr('id') == checkbox.attr('id')){
+                console.log(checkbox.attr('checked'));
+                if(checkbox.attr('checked') == 'checked'){
+                    $($(o.parentNode).children()[0])
+                    chart.addTimeSeries(axis[i], { strokeStyle: $($(o.parentNode).children()[0]).css('backgroundColor'), fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
+                }
+                else
+                {
+                    chart.removeTimeSeries(axis[i]);
+                }
+            }
+        });
+    }
+    grid = {
+        fillStyle:'#fff',
+        strokeStyle: '#ddd',
+        lineWidth: 1,
+        millisPerLine: 100,
+        verticalSections: 4
+    };
+    labels = {
+        fillStyle:'#000'
+    }
+
+    options = {
+        grid: grid,
+        labels: labels,
+        interpolation: 'line',
+    }
+    var chart = new SmoothieChart(options);
+
+    // setup timeseries for every axis
+    axis = []
+    $('#transmitter input').each(function(i,o){
+        axis[i] = new TimeSeries();
+        chart.addTimeSeries(axis[i], { strokeStyle: $($(o.parentNode).children()[0]).css('backgroundColor'), fillStyle: 'rgba(0,0,0, 0)', lineWidth: 3 });
+    });
+    chart.streamTo(document.getElementById("chart"), 100);
+
+    function getLog() {
+        $.ajax({
+            url:host+'/?command=s',
+            complete: function() {
+                setTimeout(getLog,100); //now that the request is complete, do it again in 1 second
+            },
+            success: function(data, status) {
+                $('#log').prepend(data.join(',') + '\n')
+                now = new Date().getTime()
+                $('#transmitter input').each(function(i,o){
+                    axis[i].append(now, data[$(o).val()]);
+                    $('#' + $(o).attr('id') + '-value').text(data[$(o).val()])
+                });
+            }
+        });
+
+    }
+
+    getLog();
